@@ -49,60 +49,24 @@ y = df['success']
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X, y)
 
-# === CSS Styling ===
-st.markdown("""
-<style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-h1, h2, h3 {
-    text-shadow: 2px 2px #000000aa;
-    animation: fadeIn 2s ease-in;
-}
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-.stButton>button {
-    background-color: #4caf50;
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 8px 20px;
-    transition: background-color 0.3s ease;
-}
-.stButton>button:hover {
-    background-color: #45a049;
-}
-
-/* Fixed bottom-right info box */
-#fixed-box {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(30,30,30,0.85);
-    border-radius: 12px;
-    padding: 15px 25px;
-    box-shadow: 0 0 10px 2px #4caf50;
-    z-index: 9999;
-    font-size: 14px;
-    color: #d1d1d1;
-    max-width: 250px;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # === Sidebar ===
 st.sidebar.title("🚀 SpaceX Launch Dashboard")
 st.sidebar.write("Filters & Prediction")
 
-# Dark / Light Mode Toggle
+# === Theme Toggle (Light / Dark) ===
 mode = st.sidebar.radio("Theme Mode", ["Light", "Dark"])
 if mode == "Dark":
     st.markdown("""
     <style>
-    body {
-        background-color: #121212;
+    .stApp {
+        background-color: #121212 !important;
+        color: #ffffff !important;
+    }
+    .css-1cpxqw2, .css-ffhzg2, .css-10trblm {
+        color: #ffffff !important;
+    }
+    .stButton>button {
+        background-color: #4caf50;
         color: white;
     }
     </style>
@@ -110,14 +74,18 @@ if mode == "Dark":
 else:
     st.markdown("""
     <style>
-    body {
-        background-color: white;
-        color: black;
+    .stApp {
+        background-color: white !important;
+        color: black !important;
+    }
+    .stButton>button {
+        background-color: #4caf50;
+        color: white;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Sidebar filters
+# === Filters ===
 years = sorted(df['launch_year'].unique())
 selected_year = st.sidebar.selectbox("Filter launches by Year", years)
 
@@ -135,12 +103,11 @@ predict_btn = st.sidebar.button("Predict Success")
 st.title("🚀 SpaceX Launch Dashboard")
 st.write("Explore SpaceX launch history, visualize launch sites, and predict future launch success probabilities.")
 
-# Filtered launches
 filtered = df[df['launch_year'] == selected_year]
 
 # --- Launch Outcomes Bar Chart ---
 st.subheader(f"Launch Outcomes in {selected_year}")
-success_counts = filtered['success'].value_counts().rename({1:'Success', 0:'Failure'})
+success_counts = filtered['success'].value_counts().rename({1: 'Success', 0: 'Failure'})
 st.bar_chart(success_counts)
 
 # --- Launch Trends Over Years ---
@@ -205,7 +172,18 @@ total_launches = len(df)
 success_rate = df['success'].mean() * 100
 
 st.markdown(f"""
-<div id="fixed-box">
+<div id="fixed-box" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(30,30,30,0.85);
+    border-radius: 12px;
+    padding: 15px 25px;
+    box-shadow: 0 0 10px 2px #4caf50;
+    z-index: 9999;
+    font-size: 14px;
+    color: #d1d1d1;
+    max-width: 250px;">
     <b>Dashboard Summary</b><br>
     Total Launches: {total_launches}<br>
     Overall Success Rate: {success_rate:.1f}%<br>
