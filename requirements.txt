@@ -1,0 +1,7 @@
+streamlit
+pandas
+scikit-learn
+requests
+folium
+streamlit-folium
+matplotlib
